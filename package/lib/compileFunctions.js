@@ -102,11 +102,13 @@ module.exports = {
         const type = funcObject.events[0].event.eventType;
         const path = funcObject.events[0].event.path; //eslint-disable-line
         const resource = funcObject.events[0].event.resource;
+        const failurePolicy = funcObject.events[0].event.failurePolicy;
 
         funcTemplate.properties.eventTrigger = {};
         funcTemplate.properties.eventTrigger.eventType = type;
         if (path) funcTemplate.properties.eventTrigger.path = path;
         funcTemplate.properties.eventTrigger.resource = resource;
+        if (failurePolicy) funcTemplate.properties.eventTrigger.failurePolicy = failurePolicy;
       }
 
       if (!funcTemplate.accessControl.gcpIamPolicy.bindings.length) {
