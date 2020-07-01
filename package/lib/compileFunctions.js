@@ -209,7 +209,7 @@ const getFunctionTemplate = (funcObject, projectName, region, sourceArchiveUrl) 
       runtime: 'nodejs8',
       timeout: '60s',
       entryPoint: funcObject.handler,
-      function: funcObject.name,
+      function:  funcObject.useLegacyNaming ? funcObject.handler : funcObject.name,
       sourceArchiveUrl,
     },
     accessControl: {

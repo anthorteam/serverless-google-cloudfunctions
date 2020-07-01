@@ -50,7 +50,7 @@ module.exports = {
           const region = this.options.region;
           const project = this.serverless.service.provider.project;
           const baseUrl = `https://${region}-${project}.cloudfunctions.net`;
-          const path = serviceFunc.name; // NOTE this might change
+          const path = serviceFunc.useLegacyNaming ? serviceFunc.handler : serviceFunc.name;
           funcResource = `${baseUrl}/${path}`;
         }
 
