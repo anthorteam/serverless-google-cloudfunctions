@@ -115,6 +115,10 @@ module.exports = {
         delete funcTemplate.accessControl;
       }
 
+      if (!funcTemplate.accessControl.gcpIamPolicy.bindings.length) {
+        delete funcTemplate.accessControl;
+      }
+
       this.serverless.service.provider.compiledConfigurationTemplate.resources.push(funcTemplate);
     });
 
