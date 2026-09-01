@@ -700,6 +700,48 @@ describe('CompileFunctions', () => {
       });
     });
 
+    it('should set min instances on the function configuration', () => {
+      googlePackage.serverless.service.functions = {
+        func1: {
+          handler: 'func1',
+          memorySize: 128,
+          runtime: 'nodejs8',
+          minInstances: 1,
+          vpc: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          events: [{ http: 'foo' }],
+        },
+      };
+
+      const compiledResources = [
+        {
+          type: 'gcp-types/cloudfunctions-v1:projects.locations.functions',
+          name: 'my-service-dev-func1',
+          properties: {
+            parent: 'projects/myProject/locations/us-central1',
+            runtime: 'nodejs8',
+            function: 'my-service-dev-func1',
+            entryPoint: 'func1',
+            availableMemoryMb: 128,
+            timeout: '60s',
+            minInstances: 1,
+            sourceArchiveUrl: 'gs://sls-my-service-dev-12345678/some-path/artifact.zip',
+            httpsTrigger: {
+              url: 'foo',
+            },
+            labels: {},
+            vpcConnector: 'projects/pg-us-n-app-123456/locations/us-central1/connectors/my-vpc',
+          },
+        },
+      ];
+
+      return googlePackage.compileFunctions().then(() => {
+        expect(consoleLogStub.called).toEqual(true);
+        expect(
+          googlePackage.serverless.service.provider.compiledConfigurationTemplate.resources
+        ).toEqual(compiledResources);
+      });
+    });
+
     it('should not require max instances on each function configuration', () => {
       googlePackage.serverless.service.functions = {
         func1: {
